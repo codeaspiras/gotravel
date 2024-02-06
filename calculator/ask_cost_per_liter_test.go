@@ -4,6 +4,7 @@ import (
 	"errors"
 	"gotravel/calculator"
 	"gotravel/mocks"
+	"gotravel/pkg/constants"
 	"gotravel/pkg/errs"
 	"testing"
 
@@ -12,12 +13,11 @@ import (
 
 func Test_AskCostPerLiter(t *testing.T) {
 	io := new(mocks.IO)
-	question := "Qual o valor por litro de combustível (R$/L)? > "
 
 	t.Run("should return the inputed number", func(t *testing.T) {
 		// Arrange
 		expected := float64(123.5)
-		io.On("AskFloat", question).Return(expected, nil).Once()
+		io.On("AskFloat", constants.QuestionCostPerLiter).Return(expected, nil).Once()
 
 		// Act
 		v, err := calculator.AskCostPerLiter(io)
@@ -25,39 +25,43 @@ func Test_AskCostPerLiter(t *testing.T) {
 		// Assert
 		assert.NoError(t, err, "err should be nil")
 		assert.Equal(t, expected, v, "v should be equal to the expected value")
+		assert.True(t, io.AssertExpectations(t), "io expectations should be true")
 	})
 
 	t.Run("should not return zero", func(t *testing.T) {
 		// Arrange
-		io.On("AskFloat", question).Return(float64(0), nil).Once()
+		io.On("AskFloat", constants.QuestionCostPerLiter).Return(float64(0), nil).Once()
 
 		// Act
 		_, err := calculator.AskCostPerLiter(io)
 
 		// Assert
 		assert.Equal(t, errs.ErrCostPerLiterCannotBeEqualOrLowerThanZero, err, "err should be errs.ErrCostPerLiterCannotBeEqualOrLowerThanZero")
+		assert.True(t, io.AssertExpectations(t), "io expectations should be true")
 	})
 
 	t.Run("should not return numbers lower than zero", func(t *testing.T) {
 		// Arrange
-		io.On("AskFloat", question).Return(float64(-12), nil).Once()
+		io.On("AskFloat", constants.QuestionCostPerLiter).Return(float64(-12), nil).Once()
 
 		// Act
 		_, err := calculator.AskCostPerLiter(io)
 
 		// Assert
 		assert.Equal(t, errs.ErrCostPerLiterCannotBeEqualOrLowerThanZero, err, "err should be errs.ErrCostPerLiterCannotBeEqualOrLowerThanZero")
+		assert.True(t, io.AssertExpectations(t), "io expectations should be true")
 	})
 
 	t.Run("should return error", func(t *testing.T) {
 		// Arrange
 		expected := errors.New("testing error")
-		io.On("AskFloat", question).Return(float64(0), expected).Once()
+		io.On("AskFloat", constants.QuestionCostPerLiter).Return(float64(0), expected).Once()
 
 		// Act
 		_, err := calculator.AskCostPerLiter(io)
 
 		// Assert
 		assert.Equal(t, expected, err, "err should be equal to the expected")
+		assert.True(t, io.AssertExpectations(t), "io expectations should be true")
 	})
 }
