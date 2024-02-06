@@ -16,13 +16,13 @@ type costToCover_TestCase struct {
 
 func costToCover_TestCases() map[string]costToCover_TestCase {
 	return map[string]costToCover_TestCase{
-		"should result $53.50": costToCover_TestCase{
+		"should result $53.50": {
 			distancePerLiter: 10,
 			distance:         100,
 			costPerLiter:     5.35,
 			expectedResult:   53.5,
 		},
-		"should result $72.50": costToCover_TestCase{
+		"should result $72.50": {
 			distancePerLiter: 20,
 			distance:         500,
 			costPerLiter:     2.9,
