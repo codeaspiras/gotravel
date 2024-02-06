@@ -6,16 +6,16 @@ import (
 	"os"
 )
 
-func Ask(template string, args ...interface{}) string {
+func Ask(template string, args ...interface{}) (string, error) {
 	fmt.Printf(template, args...)
 	buf := bufio.NewScanner(os.Stdin)
 	if buf.Scan() {
-		return buf.Text()
+		return buf.Text(), nil
 	}
 
 	if err := buf.Err(); err != nil {
-		panic(err.Error())
+		return "", err
 	}
 
-	return ""
+	return "", nil
 }
