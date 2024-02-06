@@ -40,12 +40,48 @@ func (_m *IO) Ask(template string, arguments ...interface{}) (string, error) {
 	return r0, r1
 }
 
+// AskFloat provides a mock function with given fields: template, arguments
+func (_m *IO) AskFloat(template string, arguments ...interface{}) (float64, error) {
+	var _ca []interface{}
+	_ca = append(_ca, template)
+	_ca = append(_ca, arguments...)
+	ret := _m.Called(_ca...)
+
+	if len(ret) == 0 {
+		panic("no return value specified for AskFloat")
+	}
+
+	var r0 float64
+	var r1 error
+	if rf, ok := ret.Get(0).(func(string, ...interface{}) (float64, error)); ok {
+		return rf(template, arguments...)
+	}
+	if rf, ok := ret.Get(0).(func(string, ...interface{}) float64); ok {
+		r0 = rf(template, arguments...)
+	} else {
+		r0 = ret.Get(0).(float64)
+	}
+
+	if rf, ok := ret.Get(1).(func(string, ...interface{}) error); ok {
+		r1 = rf(template, arguments...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Echo provides a mock function with given fields: template, arguments
 func (_m *IO) Echo(template string, arguments ...interface{}) {
 	var _ca []interface{}
 	_ca = append(_ca, template)
 	_ca = append(_ca, arguments...)
 	_m.Called(_ca...)
+}
+
+// End provides a mock function with given fields:
+func (_m *IO) End() {
+	_m.Called()
 }
 
 // NewIO creates a new instance of IO. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
