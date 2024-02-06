@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func Ask(template string, args ...interface{}) (string, error) {
+func (*io) Ask(template string, args ...interface{}) (string, error) {
 	fmt.Printf(template, args...)
 	buf := bufio.NewScanner(os.Stdin)
 	if buf.Scan() {

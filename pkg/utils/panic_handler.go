@@ -2,12 +2,12 @@ package utils
 
 import "gotravel/pkg/stdio"
 
-func PanicHandler() {
+func PanicHandler(io stdio.IO) {
 	err := recover()
 	if err == nil {
 		return
 	}
 
-	stdio.Echo("# Isso gerou um erro fatal:\n- %s", err)
-	End()
+	io.Echo("# Isso gerou um erro fatal:\n- %s", err)
+	io.End()
 }

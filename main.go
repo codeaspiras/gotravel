@@ -7,29 +7,30 @@ import (
 )
 
 func main() {
-	defer utils.PanicHandler()
-	intro()
+	io := stdio.New()
+	defer utils.PanicHandler(io)
+	intro(io)
 
-	costPerLiter, err := calculator.AskCostPerLiter()
+	costPerLiter, err := calculator.AskCostPerLiter(io)
 	if err != nil {
-		utils.ErrorHandler(err)
+		utils.ErrorHandler(io, err)
 		return
 	}
 
-	distance, err := calculator.AskDistance()
+	distance, err := calculator.AskDistance(io)
 	if err != nil {
-		utils.ErrorHandler(err)
+		utils.ErrorHandler(io, err)
 		return
 	}
 
-	distancePerLiter, err := calculator.AskDistancePerLiter()
+	distancePerLiter, err := calculator.AskDistancePerLiter(io)
 	if err != nil {
-		utils.ErrorHandler(err)
+		utils.ErrorHandler(io, err)
 		return
 	}
 
 	totalDistance := distance * 2 // go & back
 	estimation := calculator.CostToCover(totalDistance, distancePerLiter, costPerLiter)
-	stdio.Echo("O custo estimado para percorrer %.2fkm é de R$%.2f!", totalDistance, estimation)
-	utils.End()
+	io.Echo("O custo estimado para percorrer %.2fkm é de R$%.2f!", totalDistance, estimation)
+	io.End()
 }

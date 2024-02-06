@@ -2,11 +2,11 @@ package calculator
 
 import (
 	"gotravel/pkg/errs"
-	"gotravel/pkg/utils"
+	"gotravel/pkg/stdio"
 )
 
-func AskDistancePerLiter() (float64, error) {
-	v, err := utils.AskFloat("Quantos quilômetros o automóvel consegue percorrer com um litro de combustível (km/L)? > ")
+func AskDistancePerLiter(io stdio.IO) (float64, error) {
+	v, err := io.AskFloat("Quantos quilômetros o automóvel consegue percorrer com um litro de combustível (km/L)? > ")
 	if err != nil {
 		return 0, err
 	}

@@ -2,11 +2,11 @@ package calculator
 
 import (
 	"gotravel/pkg/errs"
-	"gotravel/pkg/utils"
+	"gotravel/pkg/stdio"
 )
 
-func AskDistance() (float64, error) {
-	v, err := utils.AskFloat("Qual a distância do ponto de partida até o ponto de chegada (em km)? > ")
+func AskDistance(io stdio.IO) (float64, error) {
+	v, err := io.AskFloat("Qual a distância do ponto de partida até o ponto de chegada (em km)? > ")
 	if err != nil {
 		return 0, err
 	}

@@ -1,12 +1,11 @@
-package utils
+package stdio
 
 import (
-	"gotravel/pkg/stdio"
 	"strconv"
 )
 
-func AskFloat(template string, args ...interface{}) (float64, error) {
-	v, err := stdio.Ask(template, args...)
+func (i *io) AskFloat(template string, args ...interface{}) (float64, error) {
+	v, err := i.Ask(template, args...)
 	if err != nil {
 		return 0, err
 	}

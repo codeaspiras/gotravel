@@ -5,17 +5,17 @@ import (
 	"gotravel/pkg/stdio"
 )
 
-func ErrorHandler(err error) {
+func ErrorHandler(io stdio.IO, err error) {
 	if err == nil {
 		return
 	}
 
 	switch err {
 	case errs.ErrCostPerLiterCannotBeEqualOrLowerThanZero, errs.ErrDistanceCannotBeEqualOrLowerThanZero, errs.ErrDistancePerLiterCannotBeEqualOrLowerThanZero:
-		stdio.Echo(err.Error())
+		io.Echo(err.Error())
 	default:
-		stdio.Echo("# Isso gerou um erro:\n- %s", err)
+		io.Echo("# Isso gerou um erro:\n- %s", err)
 	}
 
-	End()
+	io.End()
 }
