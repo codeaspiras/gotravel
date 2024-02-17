@@ -28,9 +28,12 @@ const (
 )
 
 var (
-	inputStyle  = lipgloss.NewStyle().Foreground(lightBlue)
-	outputStyle = lipgloss.NewStyle().Foreground(darkGray)
-	validInputs = make(map[int]float64)
+	inputStyle        = lipgloss.NewStyle().Foreground(lightBlue)
+	outputStyle       = lipgloss.NewStyle().Foreground(darkGray)
+	validInputs       = make(map[int]float64)
+	errNotANumber     = fmt.Errorf("informe somente números (com ponto no lugar da vírgula)")
+	errNegativeNumber = fmt.Errorf("informe um valor positivo")
+	errZeroNumber     = fmt.Errorf("informe um valor maior que zero")
 )
 
 type model struct {
@@ -40,19 +43,36 @@ type model struct {
 }
 
 func numberValidator(s string, key int) error {
+	delete(validInputs, key)
 	num, err := strconv.ParseFloat(s, 64)
 	if err != nil {
-		delete(validInputs, key)
-		return fmt.Errorf("informe somente números (com ponto no lugar da vírgula)")
+		return errNotANumber
 	}
 
-	if num <= 0 {
-		delete(validInputs, key)
-		return fmt.Errorf("informe um valor positivo")
+	if num < 0 {
+		return errNegativeNumber
+	}
+
+	if num == 0 {
+		return errZeroNumber
 	}
 
 	validInputs[key] = num
 	return nil
+}
+
+func altNumberValidator(s string, key int, altKey int) error {
+	err := numberValidator(s, key)
+	if err == nil {
+		return nil
+	}
+
+	if _, isAltValidated := validInputs[altKey]; err == errZeroNumber && isAltValidated {
+		validInputs[key] = 0
+		return nil
+	}
+
+	return err
 }
 
 func NewFormModel() model {
@@ -64,7 +84,7 @@ func NewFormModel() model {
 	inputs[distanceToGo].Width = 30
 	inputs[distanceToGo].Prompt = ""
 	inputs[distanceToGo].Validate = func(s string) error {
-		return numberValidator(s, distanceToGo)
+		return altNumberValidator(s, distanceToGo, distanceToReturn)
 	}
 
 	inputs[distanceToReturn] = textinput.New()
@@ -73,7 +93,7 @@ func NewFormModel() model {
 	inputs[distanceToReturn].Width = 30
 	inputs[distanceToReturn].Prompt = ""
 	inputs[distanceToReturn].Validate = func(s string) error {
-		return numberValidator(s, distanceToReturn)
+		return altNumberValidator(s, distanceToReturn, distanceToGo)
 	}
 
 	inputs[costPerLiter] = textinput.New()
