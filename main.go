@@ -1,14 +1,8 @@
 package main
 
 import (
-	"gotravel/cmd"
-	"gotravel/pkg/stdio"
-	"os"
-)
-
-const (
-	commandServeHTTP = "serve"
-	commandRunCLI    = ""
+	"github.com/codeaspiras/gotravel/cmd"
+	"github.com/codeaspiras/gotravel/stdio"
 )
 
 func main() {
@@ -16,18 +10,5 @@ func main() {
 	io := stdio.New()
 
 	// run
-	command := ""
-	if len(os.Args) > 1 {
-		command = os.Args[1]
-	}
-
-	switch command {
-	case commandServeHTTP:
-		cmd.HTTP(io)
-	case commandRunCLI:
-		cmd.CLI(io)
-	default:
-		io.Echo("not implemented")
-		io.End()
-	}
+	cmd.CLI(io)
 }

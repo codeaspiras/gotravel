@@ -1,4 +1,4 @@
-# GOTRAVEL
+# github.com/codeaspiras/gotravel
 
 Esse projeto foi desenvolvido apenas para resolver um desafio lançado pelo [CodeAspiras](https://blog.codeaspiras.dev).
 Caso tenha se interessado pela proposta e queira desenvolver sua solução, sinta-se a vontade!

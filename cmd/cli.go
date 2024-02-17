@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"gotravel/cmd/cli"
-	"gotravel/pkg/stdio"
-	"gotravel/pkg/utils"
+	"github.com/codeaspiras/gotravel/cmd/views"
+	"github.com/codeaspiras/gotravel/stdio"
+	"github.com/codeaspiras/gotravel/utils"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -11,13 +11,14 @@ import (
 func CLI(io stdio.IO) {
 	defer utils.PanicHandler(io)
 	p := tea.NewProgram(
-		cli.NewFormModel(),
+		views.NewFormModel(),
 		tea.WithAltScreen(),
 	)
 
-	p.SetWindowTitle("#gotravel")
+	p.SetWindowTitle("#github.com/codeaspiras/gotravel")
 
 	if _, err := p.Run(); err != nil {
-		utils.ErrorHandler(io, err)
+		io.Echo("# Isso gerou um erro:\n- %s", err)
+		io.End()
 	}
 }

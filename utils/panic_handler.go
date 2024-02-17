@@ -1,6 +1,6 @@
 package utils
 
-import "gotravel/pkg/stdio"
+import "github.com/codeaspiras/gotravel/stdio"
 
 func PanicHandler(io stdio.IO) {
 	err := recover()

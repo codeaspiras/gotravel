@@ -1,7 +1,7 @@
 package calculator_test
 
 import (
-	"gotravel/calculator"
+	"github.com/codeaspiras/gotravel/calculator"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

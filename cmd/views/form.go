@@ -1,9 +1,10 @@
-package cli
+package views
 
 import (
 	"fmt"
-	"gotravel/calculator"
 	"strconv"
+
+	"github.com/codeaspiras/gotravel/calculator"
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
