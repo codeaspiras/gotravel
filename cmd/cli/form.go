@@ -78,7 +78,7 @@ func NewFormModel() model {
 	inputs[costPerLiter] = textinput.New()
 	inputs[costPerLiter].Placeholder = "10.5"
 	inputs[costPerLiter].CharLimit = 7
-	inputs[costPerLiter].Width = 30
+	inputs[costPerLiter].Width = 29
 	inputs[costPerLiter].Prompt = ""
 	inputs[costPerLiter].Validate = func(s string) error {
 		return numberValidator(s, costPerLiter)
@@ -157,10 +157,10 @@ func (m model) View() string {
  fração, insira somente números e ponto (.) no lugar da vírgula.
 
  %s  %s
- %s  %s
+ %s %s
 
  %s  %s
- %s  %s
+ $%s %s
 
  %s
 `,
