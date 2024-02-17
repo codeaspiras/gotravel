@@ -15,7 +15,8 @@ type (
 )
 
 const (
-	distance = iota
+	distanceToGo = iota
+	distanceToReturn
 	costPerLiter
 	distancePerLiter
 )
@@ -54,21 +55,30 @@ func numberValidator(s string, key int) error {
 }
 
 func NewFormModel() model {
-	var inputs []textinput.Model = make([]textinput.Model, 3)
-	inputs[distance] = textinput.New()
-	inputs[distance].Placeholder = "123.45"
-	inputs[distance].Focus()
-	inputs[distance].CharLimit = 10
-	inputs[distance].Width = 30
-	inputs[distance].Prompt = ""
-	inputs[distance].Validate = func(s string) error {
-		return numberValidator(s, distance)
+	var inputs []textinput.Model = make([]textinput.Model, 4)
+	inputs[distanceToGo] = textinput.New()
+	inputs[distanceToGo].Placeholder = "123.45"
+	inputs[distanceToGo].Focus()
+	inputs[distanceToGo].CharLimit = 10
+	inputs[distanceToGo].Width = 30
+	inputs[distanceToGo].Prompt = ""
+	inputs[distanceToGo].Validate = func(s string) error {
+		return numberValidator(s, distanceToGo)
+	}
+
+	inputs[distanceToReturn] = textinput.New()
+	inputs[distanceToReturn].Placeholder = "123.45"
+	inputs[distanceToReturn].CharLimit = 10
+	inputs[distanceToReturn].Width = 30
+	inputs[distanceToReturn].Prompt = ""
+	inputs[distanceToReturn].Validate = func(s string) error {
+		return numberValidator(s, distanceToReturn)
 	}
 
 	inputs[costPerLiter] = textinput.New()
 	inputs[costPerLiter].Placeholder = "10.5"
 	inputs[costPerLiter].CharLimit = 7
-	inputs[costPerLiter].Width = 20
+	inputs[costPerLiter].Width = 30
 	inputs[costPerLiter].Prompt = ""
 	inputs[costPerLiter].Validate = func(s string) error {
 		return numberValidator(s, costPerLiter)
@@ -77,7 +87,7 @@ func NewFormModel() model {
 	inputs[distancePerLiter] = textinput.New()
 	inputs[distancePerLiter].Placeholder = "14.0"
 	inputs[distancePerLiter].CharLimit = 6
-	inputs[distancePerLiter].Width = 20
+	inputs[distancePerLiter].Width = 30
 	inputs[distancePerLiter].Prompt = ""
 	inputs[distancePerLiter].Validate = func(s string) error {
 		return numberValidator(s, distancePerLiter)
@@ -130,13 +140,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	output := "Preencha os campos..."
-	if len(validInputs) == 3 {
+	if len(validInputs) == 4 {
+		totalDistance := validInputs[distanceToGo] + validInputs[distanceToReturn]
 		costToCover := calculator.CostToCover(
-			validInputs[distance],
+			totalDistance,
 			validInputs[distancePerLiter],
 			validInputs[costPerLiter],
 		)
-		output = fmt.Sprintf("Resultado: $%.2f", costToCover)
+		output = fmt.Sprintf("Resultado: $%.2f para percorrer %.2fkm", costToCover, totalDistance)
 	}
 	return fmt.Sprintf(
 		` Bem-vindo(a) à calculadora de custo de combustível!
@@ -145,18 +156,20 @@ func (m model) View() string {
  Observação: Para valores numéricos, se quiser informar uma
  fração, insira somente números e ponto (.) no lugar da vírgula.
 
- %s
- %s
+ %s  %s
+ %s  %s
 
  %s  %s
  %s  %s
 
  %s
 `,
-		inputStyle.Width(30).Render("Distância (km)"),
-		m.inputs[distance].View(),
-		inputStyle.Width(20).Render("Combustível ($/L)"),
-		inputStyle.Width(20).Render("Eficiência (km/L)"),
+		inputStyle.Width(30).Render("Distância ida (km)"),
+		inputStyle.Width(30).Render("Distância volta (km)"),
+		m.inputs[distanceToGo].View(),
+		m.inputs[distanceToReturn].View(),
+		inputStyle.Width(30).Render("Combustível ($/L)"),
+		inputStyle.Width(30).Render("Eficiência (km/L)"),
 		m.inputs[costPerLiter].View(),
 		m.inputs[distancePerLiter].View(),
 		outputStyle.Render(output),
