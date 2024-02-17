@@ -31,6 +31,7 @@ var (
 	inputStyle        = lipgloss.NewStyle().Foreground(lightBlue)
 	outputStyle       = lipgloss.NewStyle().Foreground(darkGray)
 	validInputs       = make(map[int]float64)
+	errEmptyInput     = fmt.Errorf("informe algum valor")
 	errNotANumber     = fmt.Errorf("informe somente números (com ponto no lugar da vírgula)")
 	errNegativeNumber = fmt.Errorf("informe um valor positivo")
 	errZeroNumber     = fmt.Errorf("informe um valor maior que zero")
@@ -44,6 +45,10 @@ type model struct {
 
 func numberValidator(s string, key int) error {
 	delete(validInputs, key)
+	if s == "" {
+		return errEmptyInput
+	}
+
 	num, err := strconv.ParseFloat(s, 64)
 	if err != nil {
 		return errNotANumber
@@ -63,11 +68,11 @@ func numberValidator(s string, key int) error {
 
 func altNumberValidator(s string, key int, altKey int) error {
 	err := numberValidator(s, key)
-	if err == nil {
-		return nil
+	if err == nil || (err != errZeroNumber && err != errEmptyInput) {
+		return err
 	}
 
-	if _, isAltValidated := validInputs[altKey]; err == errZeroNumber && isAltValidated {
+	if _, isAltValidated := validInputs[altKey]; isAltValidated {
 		validInputs[key] = 0
 		return nil
 	}
