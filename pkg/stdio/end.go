@@ -1,5 +1,13 @@
 package stdio
 
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
 func (i *io) End() {
-	i.Ask("# FIM - Pressione ENTER para encerrar o programa ~ ")
+	fmt.Printf("# FIM - Pressione ENTER para encerrar o programa ~ ")
+	buf := bufio.NewScanner(os.Stdin)
+	buf.Scan()
 }
